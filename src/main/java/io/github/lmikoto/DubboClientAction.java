@@ -7,8 +7,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.psi.PsiElement;
-import org.jf.dexlib2.immutable.util.ParamUtil;
+import com.intellij.psi.*;
 
 import javax.swing.*;
 
@@ -17,9 +16,10 @@ public class DubboClientAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         Editor editor = e.getData(CommonDataKeys.EDITOR);
-        PsiElement psiElement = (PsiElement)e.getData(CommonDataKeys.PSI_ELEMENT);
+
+        PsiElement psiElement = e.getData(CommonDataKeys.PSI_ELEMENT);
         if (!(psiElement instanceof PsiMethod)) {
-            Messages.showMessageDialog("only apply on method", "warn", (Icon)null);
+            Messages.showMessageDialog("只适用于dubbo方法", "warn", (Icon)null);
         } else {
             PsiMethod psiMethod = (PsiMethod)psiElement;
             PsiParameterList parameterList = psiMethod.getParameterList();
@@ -28,25 +28,23 @@ public class DubboClientAction extends AnAction {
             String interfaceName = String.format("%s.%s", javaFile.getPackageName(), psiClass.getName());
             String[] methodType = new String[parameterList.getParameters().length];
 
-            String methodName;
             for(int i = 0; i < parameterList.getParameters().length; ++i) {
-                methodName = parameterList.getParameters()[i].getType().getCanonicalText();
-                methodType[i] = methodName;
+                methodType[i] = parameterList.getParameters()[i].getType().getCanonicalText();;
             }
 
-            Object[] initParamArray = ParamUtil.getInitParamArray(psiMethod.getParameterList(), psiMethod.getDocComment());
-            methodName = psiMethod.getName();
-            ToolWindow toolWindow = ToolWindowManager.getInstance(e.getProject()).getToolWindow("DubboTest");
+            Object[] initParamArray = ParamUtils.getInitParamArray(psiMethod.getParameterList());
+            String methodName = psiMethod.getName();
+            ToolWindow toolWindow = ToolWindowManager.getInstance(e.getProject()).getToolWindow("DubboClient");
             if (toolWindow != null) {
                 toolWindow.show(() -> {
                 });
-                DubboPanel dubboPanel1 = (DubboPanel)toolWindow.getComponent().getComponent(0);
-                DubboMethodEntity dubboMethodEntity = new DubboMethodEntity();
-                dubboMethodEntity.setInterfaceName(interfaceName);
-                dubboMethodEntity.setParamObj(initParamArray);
-                dubboMethodEntity.setMethodType(methodType);
-                dubboMethodEntity.setMethodName(methodName);
-                DubboPanel.refreshUI(dubboPanel1, dubboMethodEntity);
+                ClientPanel client = (ClientPanel)toolWindow.getComponent().getComponent(0);
+                DubboEntity entity = new DubboEntity();
+                entity.setInterfaceName(interfaceName);
+                entity.setParamObj(initParamArray);
+                entity.setMethodType(methodType);
+                entity.setMethodName(methodName);
+                ClientPanel.refreshUI(client, entity);
             }
 
         }
