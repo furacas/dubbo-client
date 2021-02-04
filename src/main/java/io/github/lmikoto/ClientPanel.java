@@ -64,8 +64,8 @@ public class ClientPanel extends JPanel {
         jsonEditorReq = new JsonEditor(project);
         jsonEditorResp = new JsonEditor(project);
 
-//        reqPane.add(jsonEditorReq,"Center",0);
-//        respPane.add(jsonEditorResp,"Center",0);
+        reqPane.add(jsonEditorReq,BorderLayout.CENTER,0);
+        respPane.add(jsonEditorResp,BorderLayout.CENTER,0);
 
         Setting setting = Setting.getInstance();
         for (String address: setting.getAddress()){
