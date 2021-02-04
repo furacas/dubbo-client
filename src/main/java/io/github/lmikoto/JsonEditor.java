@@ -12,6 +12,9 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.ui.components.panels.NonOpaquePanel;
 
+import javax.swing.*;
+import java.awt.*;
+
 /**
  * @author liuyang
  * 2021/2/4 2:10 下午
@@ -26,14 +29,14 @@ public class JsonEditor extends NonOpaquePanel {
 
     public JsonEditor(Project project) {
         this.project = project;
-        this.psiFile = this.createPsiFile();
-        VirtualFile virtualFile = this.psiFile.getVirtualFile();
-        this.fileEditor = this.createFileEditor(virtualFile);
-        this.add(this.fileEditor.getComponent(), "Center");
+        this.psiFile = createPsiFile();
+        VirtualFile virtualFile = psiFile.getVirtualFile();
+        this.fileEditor = createFileEditor(virtualFile);
+        this.add(this.fileEditor.getComponent(), BorderLayout.CENTER);
     }
 
     private FileEditor createFileEditor(VirtualFile virtualFile) {
-        return PsiAwareTextEditorProvider.getInstance().createEditor(this.project, virtualFile);
+        return PsiAwareTextEditorProvider.getInstance().createEditor(project, virtualFile);
     }
 
     public String getDocumentText() {
@@ -42,9 +45,8 @@ public class JsonEditor extends NonOpaquePanel {
     }
 
     public Document getDocument() {
-        PsiDocumentManager instance = PsiDocumentManager.getInstance(this.project);
-        Document document = instance.getDocument(this.psiFile);
-        return document;
+        PsiDocumentManager instance = PsiDocumentManager.getInstance(project);
+        return instance.getDocument(psiFile);
     }
 
     private PsiFile createPsiFile() {

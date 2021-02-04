@@ -17,7 +17,7 @@ public class DubboEntity {
 
     private String[] methodType;
 
-    private Object[] paramObj;
+    private Object[] param;
 
     private String address;
 }

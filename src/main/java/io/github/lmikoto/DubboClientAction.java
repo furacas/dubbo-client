@@ -41,7 +41,7 @@ public class DubboClientAction extends AnAction {
                 ClientPanel client = (ClientPanel)toolWindow.getComponent().getComponent(0);
                 DubboEntity entity = new DubboEntity();
                 entity.setInterfaceName(interfaceName);
-                entity.setParamObj(initParamArray);
+                entity.setParam(initParamArray);
                 entity.setMethodType(methodType);
                 entity.setMethodName(methodName);
                 ClientPanel.refreshUI(client, entity);

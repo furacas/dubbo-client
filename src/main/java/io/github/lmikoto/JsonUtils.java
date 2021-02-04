@@ -14,4 +14,9 @@ public class JsonUtils {
     public static String toPrettyJson(Object o){
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(o);
     }
+
+    @SneakyThrows
+    public static <T> T fromJson(String json, Class<T> clazz){
+        return mapper.readValue(json,clazz);
+    }
 }
