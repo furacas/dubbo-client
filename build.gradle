@@ -3,8 +3,8 @@ plugins {
     id 'org.jetbrains.intellij' version '0.6.5'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+group 'io.github.lmikoto'
+version '1.0.0'
 
 repositories {
     mavenCentral()
@@ -29,6 +29,10 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
+      1.0.0 Dubbo调用功能.<br>
+      """
+}
+
+publishPlugin {
+    token publishToken
 }
