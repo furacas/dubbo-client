@@ -6,15 +6,16 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import lombok.Getter;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * @author liuyang
@@ -43,6 +44,8 @@ public class ClientPanel extends JPanel {
     private JTextField methodName;
 
     private JTextField version;
+    private JLabel tips;
+    private JTextField timeout;
 
     @Getter
     private JsonEditor jsonEditorReq;
@@ -97,7 +100,25 @@ public class ClientPanel extends JPanel {
             // 清空返回
             writeDocument(project, jsonEditorResp.getDocument(), "");
 
+            // 开一个线程去跑防止ui卡死
             ExecutorService executorService = Executors.newSingleThreadExecutor();
+            final Future<Object> submit = executorService.submit(() -> {
+                try {
+                    tips.setText("正在请求...");
+                    tips.updateUI();
+                    long start = System.currentTimeMillis();
+                    Object result = DubboUtils.invoke(entity);
+                    writeDocument(project, this.jsonEditorResp.getDocument(), JsonUtils.toPrettyJson(result));
+                    long end = System.currentTimeMillis();
+                    tips.setText("耗时:" + (end - start) + "ms");
+                    tips.updateUI();
+                    return result;
+                } catch (Exception ex) {
+                    tips.setText("错误:" + ex.getMessage());
+                    tips.updateUI();
+                    return new Object();
+                }
+            });
         });
     }
 
@@ -107,36 +128,37 @@ public class ClientPanel extends JPanel {
         entity.setInterfaceName(interfaceName.getText());
         entity.setAddress((String)addressBox.getSelectedItem());
         entity.setVersion(version.getText());
+        entity.setTimeout(StringUtils.isBlank(timeout.getText()) ? null : Integer.valueOf(timeout.getText()));
         if (jsonEditorReq.getDocumentText() != null && jsonEditorReq.getDocumentText().length() > 0) {
             Map<String,Object> map = JsonUtils.fromJson(jsonEditorReq.getDocumentText(),Map.class);
             List<String> methodTypeList = (List<String>)map.get(Const.METHOD_TYPE);
             if (CollectionUtils.isNotEmpty(methodTypeList)) {
-                entity.setMethodType((String[]) methodTypeList.toArray());
+                entity.setMethodType(methodTypeList.toArray(new String[0]));
             } else {
                 entity.setMethodType(new String[0]);
             }
 
-//            JSONArray paramArray = map.getJSONArray("param");
-//            if (paramArray != null) {
-//                entity.setParam(paramArray.toArray());
-//            } else {
-//                entity.setParam(new Object[0]);
-//            }
+            List<Object> paramList = (List<Object>) map.get(Const.PARAM);
+            if (CollectionUtils.isNotEmpty(paramList)) {
+                entity.setParam(paramList.toArray());
+            } else {
+                entity.setParam(new Object[0]);
+            }
         } else {
             entity.setParam(new Object[0]);
             entity.setMethodType(new String[0]);
         }
     }
 
-    public static void refreshUI(ClientPanel client, DubboEntity dubboEntity) {
+    public static void refreshUI(ClientPanel client, DubboEntity entity) {
         JTextField textField1 = client.getInterfaceName();
         JTextField textField2 = client.getMethodName();
         JsonEditor jsonEditorReq = client.getJsonEditorReq();
-        textField1.setText(dubboEntity.getInterfaceName());
-        textField2.setText(dubboEntity.getMethodName());
+        textField1.setText(entity.getInterfaceName());
+        textField2.setText(entity.getMethodName());
         Map<String, Object> map = new HashMap();
-        map.put(Const.PARAM, dubboEntity.getParam());
-        map.put(Const.METHOD_TYPE, dubboEntity.getMethodType());
+        map.put(Const.PARAM, entity.getParam());
+        map.put(Const.METHOD_TYPE, entity.getMethodType());
         writeDocument(client.getProject(), jsonEditorReq.getDocument(), JsonUtils.toPrettyJson(map));
         client.updateUI();
     }
@@ -144,4 +166,5 @@ public class ClientPanel extends JPanel {
     private static void writeDocument(Project project, Document document, String text) {
         WriteCommandAction.runWriteCommandAction(project, () -> document.setText(text));
     }
+
 }

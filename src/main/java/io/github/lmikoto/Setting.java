@@ -5,14 +5,15 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
+import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author liuyang
@@ -27,12 +28,15 @@ public class Setting implements PersistentStateComponent<Setting> {
     @Setter
     public List<String> address;
 
+    @Getter
+    public Map<String,DubboEntity> entityCache;
+
     public List<String> getAddress(){
         if(CollectionUtils.isEmpty(address)){
             address = new ArrayList<>();
             address.add("dubbo://127.0.0.1:26880");
         }
-        return this.address;
+        return address;
     }
 
     public static Setting getInstance() {

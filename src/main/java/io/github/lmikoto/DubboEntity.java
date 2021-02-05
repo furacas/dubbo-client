@@ -20,4 +20,6 @@ public class DubboEntity {
     private Object[] param;
 
     private String address;
+
+    private Integer timeout;
 }

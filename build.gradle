@@ -17,6 +17,8 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.2'
     testCompileOnly 'org.projectlombok:lombok:1.18.2'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.3'
+    compile group: 'org.apache.dubbo', name: 'dubbo', version: '2.7.8'
+
 
 }
 
