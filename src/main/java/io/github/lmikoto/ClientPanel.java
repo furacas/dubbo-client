@@ -73,6 +73,7 @@ public class ClientPanel extends JPanel {
 
         reqPane.add(jsonEditorReq,BorderLayout.CENTER,0);
         respPane.add(jsonEditorResp,BorderLayout.CENTER,0);
+        version.setText("1.0.0");
 
         Setting setting = Setting.getInstance();
         for (String address: setting.getAddress()){
