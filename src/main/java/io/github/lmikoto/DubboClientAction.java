@@ -38,7 +38,8 @@ public class DubboClientAction extends AnAction {
                 ClientPanel client = (ClientPanel)toolWindow.getComponent().getComponent(0);
 
                 Setting instance = Setting.getInstance();
-                DubboEntity entity = instance.getCache(interfaceName, methodName);
+
+                DubboEntity entity = instance.getCache(interfaceName, methodName,methodType);
                 if(Objects.isNull(entity)){
                     Object[] initParamArray = ParamUtils.getInitParamArray(psiMethod.getParameterList());
                     entity = new DubboEntity();
