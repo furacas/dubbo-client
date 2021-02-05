@@ -3,7 +3,8 @@ package io.github.lmikoto;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.wm.ToolWindow;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -21,13 +22,14 @@ import java.util.concurrent.Future;
  * @author liuyang
  * 2021/2/4 5:46 下午
  */
+@Data
+@EqualsAndHashCode(callSuper=false)
 public class ClientPanel extends JPanel {
 
     private JPanel mainPanel;
 
     private JButton runBtn;
 
-    @Getter
     private JTextField interfaceName;
 
     private JPanel reqPane;
@@ -40,25 +42,24 @@ public class ClientPanel extends JPanel {
 
     private JComboBox<String> addressBox;
 
-    @Getter
     private JTextField methodName;
 
     private JTextField version;
+
     private JLabel tips;
+
     private JTextField timeout;
 
-    @Getter
     private JsonEditor jsonEditorReq;
 
     private JsonEditor jsonEditorResp;
 
-    @Getter
     private Project project;
 
     private DubboEntity entity;
 
 
-    public ClientPanel(Project project, ToolWindow toolWindow){
+    public ClientPanel(Project project){
         initUI(project);
         initListener();
     }
@@ -73,7 +74,7 @@ public class ClientPanel extends JPanel {
 
         reqPane.add(jsonEditorReq,BorderLayout.CENTER,0);
         respPane.add(jsonEditorResp,BorderLayout.CENTER,0);
-        version.setText("1.0.0");
+        version.setText(Const.DEFAULT_VERSION);
 
         Setting setting = Setting.getInstance();
         for (String address: setting.getAddress()){
@@ -98,12 +99,14 @@ public class ClientPanel extends JPanel {
 
             refreshEntity();
 
+            saveCache();
+
             // 清空返回
             writeDocument(project, jsonEditorResp.getDocument(), "");
 
             // 开一个线程去跑防止ui卡死
             ExecutorService executorService = Executors.newSingleThreadExecutor();
-            final Future<Object> submit = executorService.submit(() -> {
+            executorService.submit(() -> {
                 try {
                     tips.setText("正在请求...");
                     tips.updateUI();
@@ -115,12 +118,15 @@ public class ClientPanel extends JPanel {
                     tips.updateUI();
                     return result;
                 } catch (Exception ex) {
-                    tips.setText("错误:" + ex.getMessage());
-                    tips.updateUI();
-                    return new Object();
+                    return ex.getMessage();
                 }
             });
         });
+    }
+
+    private void saveCache() {
+        Setting instance = Setting.getInstance();
+        instance.addCache(entity);
     }
 
     private void refreshEntity() {
@@ -152,17 +158,23 @@ public class ClientPanel extends JPanel {
     }
 
     public static void refreshUI(ClientPanel client, DubboEntity entity) {
-        JTextField textField1 = client.getInterfaceName();
-        JTextField textField2 = client.getMethodName();
+        entity2UI(client,entity);
         JsonEditor jsonEditorReq = client.getJsonEditorReq();
-        textField1.setText(entity.getInterfaceName());
-        textField2.setText(entity.getMethodName());
         Map<String, Object> map = new HashMap();
         map.put(Const.PARAM, entity.getParam());
         map.put(Const.METHOD_TYPE, entity.getMethodType());
         writeDocument(client.getProject(), jsonEditorReq.getDocument(), JsonUtils.toPrettyJson(map));
         client.updateUI();
     }
+
+    private static void entity2UI(ClientPanel client, DubboEntity entity) {
+        client.getInterfaceName().setText(entity.getInterfaceName());
+        client.getMethodName().setText(entity.getMethodName());
+        client.getVersion().setText(entity.getVersion());
+        client.getTimeout().setText(entity.getTimeout().toString());
+        client.getAddressBox().setSelectedItem(entity.getAddress());
+    }
+
 
     private static void writeDocument(Project project, Document document, String text) {
         WriteCommandAction.runWriteCommandAction(project, () -> document.setText(text));

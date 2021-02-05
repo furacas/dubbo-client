@@ -9,6 +9,7 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.psi.*;
 
 import javax.swing.*;
+import java.util.Objects;
 
 public class DubboClientAction extends AnAction {
 
@@ -30,19 +31,25 @@ public class DubboClientAction extends AnAction {
             }
 
             String methodName = psiMethod.getName();
-            ToolWindow toolWindow = ToolWindowManager.getInstance(e.getProject()).getToolWindow("DubboClient");
+            ToolWindow toolWindow = ToolWindowManager.getInstance(e.getProject()).getToolWindow(Const.NAME);
             if (toolWindow != null) {
                 toolWindow.show(() -> {
                 });
                 ClientPanel client = (ClientPanel)toolWindow.getComponent().getComponent(0);
 
-//                Setting.getInstance().getEntityCache().get();
-                Object[] initParamArray = ParamUtils.getInitParamArray(psiMethod.getParameterList());
-                DubboEntity entity = new DubboEntity();
-                entity.setInterfaceName(interfaceName);
-                entity.setParam(initParamArray);
-                entity.setMethodType(methodType);
-                entity.setMethodName(methodName);
+                Setting instance = Setting.getInstance();
+                DubboEntity entity = instance.getCache(interfaceName, methodName);
+                if(Objects.isNull(entity)){
+                    Object[] initParamArray = ParamUtils.getInitParamArray(psiMethod.getParameterList());
+                    entity = new DubboEntity();
+                    entity.setInterfaceName(interfaceName);
+                    entity.setParam(initParamArray);
+                    entity.setMethodType(methodType);
+                    entity.setMethodName(methodName);
+                    entity.setVersion(Const.DEFAULT_VERSION);
+                    entity.setTimeout(10000);
+                    entity.setAddress(Const.DEFAULT_DUBBO_ADDRESS);
+                }
 
                 ClientPanel.refreshUI(client, entity);
             }

@@ -11,9 +11,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author liuyang
@@ -31,10 +29,28 @@ public class Setting implements PersistentStateComponent<Setting> {
     @Getter
     public Map<String,DubboEntity> entityCache;
 
+    public DubboEntity getCache(String interfaceName,String methodName){
+        if(Objects.isNull(entityCache)){
+            return null;
+        }
+        // 防止缓存错乱
+        DubboEntity entity = entityCache.get(interfaceName + "." + methodName);
+        if(!Objects.equals(entity.getInterfaceName(),interfaceName) || !Objects.equals(entity.getMethodName(),methodName)){
+            return null;
+        }
+        return entityCache.get(interfaceName + "." + methodName);
+    }
+
+    public void addCache(DubboEntity entity){
+        if(Objects.isNull(entityCache)){
+            entityCache = new HashMap<>();
+        }
+        entityCache.put(entity.getInterfaceName() + "." + entity.getMethodName(),entity);
+    }
+
     public List<String> getAddress(){
         if(CollectionUtils.isEmpty(address)){
             address = new ArrayList<>();
-            address.add("dubbo://127.0.0.1:26880");
         }
         return address;
     }

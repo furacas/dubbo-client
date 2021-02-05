@@ -20,7 +20,7 @@ public class DubboUtils {
     private static Map<String, ReferenceConfig<GenericService>> cacheReferenceMap = new ConcurrentHashMap();
 
     static {
-        application.setName("Dubbo Client");
+        application.setName(Const.NAME);
     }
 
     public static Object invoke(DubboEntity entity){
