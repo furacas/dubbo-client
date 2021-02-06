@@ -4,9 +4,10 @@ plugins {
 }
 
 group 'io.github.lmikoto'
-version '1.0.0'
+version '1.1.0'
 
 repositories {
+    maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
     mavenCentral()
 }
 
@@ -18,8 +19,7 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.2'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.3'
     compile group: 'org.apache.dubbo', name: 'dubbo', version: '2.7.8'
-
-
+    compile group: 'org.apache.dubbo', name: 'dubbo-registry-nacos', version: '2.7.8'
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
@@ -29,7 +29,8 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-      1.0.0 Dubbo调用功能.<br>
+      1.0.0 提供Dubbo本地调用功能.<br>
+      1.1.0 提供Nacos注册中心调用功能.<br>
       """
 }
 

@@ -3,6 +3,7 @@ package io.github.lmikoto;
 import org.apache.commons.lang.StringUtils;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ReferenceConfig;
+import org.apache.dubbo.config.RegistryConfig;
 import org.apache.dubbo.rpc.service.GenericService;
 
 import java.util.Map;
@@ -18,6 +19,8 @@ public class DubboUtils {
     private static ApplicationConfig application = new ApplicationConfig();
 
     private static Map<String, ReferenceConfig<GenericService>> cacheReferenceMap = new ConcurrentHashMap();
+
+    private static Map<String, RegistryConfig> registryConfigCache = new ConcurrentHashMap();
 
     static {
         application.setName(Const.NAME);
@@ -41,8 +44,7 @@ public class DubboUtils {
                 return null;
             } else {
                 try {
-                    Object invoke = genericService.$invoke(entity.getMethodName(), entity.getMethodType(), entity.getParam());
-                    return invoke;
+                    return genericService.$invoke(entity.getMethodName(), entity.getMethodType(), entity.getParam());
                 } catch (Exception e) {
                     referenceConfig.destroy();
                     String key = address.name() + "-" + entity.getInterfaceName();
@@ -58,7 +60,7 @@ public class DubboUtils {
 
         Address addressType = Address.getAddressType(entity.getAddress());
 
-        String key = addressType.name() + "-" + entity.getInterfaceName();
+        String key = addressType.name() + "-" + entity.getInterfaceName() + addressType.name();
         ReferenceConfig<GenericService> reference = cacheReferenceMap.get(key);
         if (Objects.isNull(reference)) {
             reference = new ReferenceConfig<>();
@@ -73,6 +75,11 @@ public class DubboUtils {
                 reference.setUrl(entity.getAddress());
             }
 
+            if(addressType.equals(Address.REGISTRY)){
+                RegistryConfig registryConfig = getRegistryConfig(entity.getAddress(), entity.getVersion());
+                reference.setRegistry(registryConfig);
+            }
+
             if (StringUtils.isNotBlank(entity.getVersion())) {
                 reference.setVersion(entity.getVersion());
             }
@@ -81,5 +88,24 @@ public class DubboUtils {
         }
 
         return reference;
+    }
+
+    private static RegistryConfig getRegistryConfig(String address, String version) {
+        String key = address + "-" + version;
+        RegistryConfig registryConfig = registryConfigCache.get(key);
+        if (Objects.isNull(registryConfig)) {
+            registryConfig = new RegistryConfig();
+            if (StringUtils.isNotBlank(address)) {
+                registryConfig.setAddress(address);
+            }
+
+            if (StringUtils.isNotBlank(version)) {
+                registryConfig.setVersion(version);
+            }
+
+            registryConfigCache.put(key, registryConfig);
+        }
+
+        return registryConfig;
     }
 }

@@ -1,5 +1,7 @@
 package io.github.lmikoto;
 
+import org.omg.CORBA.UNKNOWN;
+
 /**
  * @author liuyang
  * 2021/2/5 10:27 上午
@@ -7,15 +9,18 @@ package io.github.lmikoto;
 public enum Address {
 
     DUBBO,
-    ZOOKEEPER,
-    NACOS,
+    REGISTRY,
     UNKNOWN;
 
     public static Address getAddressType(String address){
-        for (Address item: Address.values()){
-            if(address.startsWith(item.name().toLowerCase())){
-                return item;
-            }
+        if(address.startsWith("dubbo")){
+            return DUBBO;
+        }
+        // todo 补上其他注册中心
+        if (address.startsWith("zookeeper") ||
+                address.startsWith("nacos")
+        ){
+            return REGISTRY;
         }
         return UNKNOWN;
     }
