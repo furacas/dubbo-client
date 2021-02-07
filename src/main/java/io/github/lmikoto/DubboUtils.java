@@ -47,7 +47,7 @@ public class DubboUtils {
                     return genericService.$invoke(entity.getMethodName(), entity.getMethodType(), entity.getParam());
                 } catch (Exception e) {
                     referenceConfig.destroy();
-                    String key = address.name() + "-" + entity.getInterfaceName();
+                    String key = address.name() + "-" + entity.getInterfaceName() + address.name();;
                     cacheReferenceMap.remove(key);
                     return e.getLocalizedMessage();
                 }

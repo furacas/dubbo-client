@@ -20,6 +20,8 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.3'
     compile group: 'org.apache.dubbo', name: 'dubbo', version: '2.7.8'
     compile group: 'org.apache.dubbo', name: 'dubbo-registry-nacos', version: '2.7.8'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
