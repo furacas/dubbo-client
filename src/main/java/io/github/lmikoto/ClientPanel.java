@@ -1,22 +1,22 @@
 package io.github.lmikoto;
 
+import com.google.common.collect.Maps;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+
+import io.github.lmikoto.JsonUtils.TypeReference;
 
 /**
  * @author liuyang
@@ -129,6 +129,7 @@ public class ClientPanel extends JPanel {
         instance.addCache(entity);
     }
 
+    @SuppressWarnings("unchecked")
     private void refreshEntity() {
         JsonEditor jsonEditorReq = this.getJsonEditorReq();
         entity.setMethodName(methodName.getText());
@@ -137,7 +138,8 @@ public class ClientPanel extends JPanel {
         entity.setVersion(version.getText());
         entity.setTimeout(StringUtils.isBlank(timeout.getText()) ? null : Integer.valueOf(timeout.getText()));
         if (jsonEditorReq.getDocumentText() != null && jsonEditorReq.getDocumentText().length() > 0) {
-            Map<String,Object> map = JsonUtils.fromJson(jsonEditorReq.getDocumentText(),Map.class);
+            Map<String, Object> map = JsonUtils.fromJson(jsonEditorReq.getDocumentText(),
+                new TypeReference<Map<String, Object>>() {});
             List<String> methodTypeList = (List<String>)map.get(Const.METHOD_TYPE);
             if (CollectionUtils.isNotEmpty(methodTypeList)) {
                 entity.setMethodType(methodTypeList.toArray(new String[0]));
@@ -160,7 +162,7 @@ public class ClientPanel extends JPanel {
     public static void refreshUI(ClientPanel client, DubboEntity entity) {
         entity2UI(client,entity);
         JsonEditor jsonEditorReq = client.getJsonEditorReq();
-        Map<String, Object> map = new HashMap();
+        Map<String, Object> map = Maps.newHashMapWithExpectedSize(2);
         map.put(Const.PARAM, entity.getParam());
         map.put(Const.METHOD_TYPE, entity.getMethodType());
         writeDocument(client.getProject(), jsonEditorReq.getDocument(), JsonUtils.toPrettyJson(map));

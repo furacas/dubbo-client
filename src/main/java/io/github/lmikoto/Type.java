@@ -15,15 +15,22 @@ import java.util.Map;
  */
 public enum Type {
 
+    /**
+     * simple type
+     */
     SIMPLE,
-
+    /**
+     * map type
+     */
     MAP{
         @Override
         public Object getDefaultValue(PsiVariable var) {
             return new HashMap<>();
         }
     },
-
+    /**
+     * complex type
+     */
     COMPLEX {
         @Override
         public Object getDefaultValue(PsiVariable var) {
@@ -33,10 +40,13 @@ public enum Type {
 
         private Object convert2Json(PsiClass psiClass) {
             PsiField[] allField = PsiClassImplUtil.getAllFields(psiClass);
-            Map result = new LinkedHashMap();
+            Map<String, Object> result = new LinkedHashMap<>();
             for(PsiField psiField: allField){
                 // 忽略 static 和 final
-                if(psiField.getModifierList().hasModifierProperty(Const.STATIC) || psiField.getModifierList().hasModifierProperty(Const.FINAL)){
+                PsiModifierList modifierList = psiField.getModifierList();
+                boolean isStaticOrFinal = modifierList != null && (modifierList.hasModifierProperty(PsiModifier.STATIC)
+                    || modifierList.hasModifierProperty(PsiModifier.FINAL));
+                if(isStaticOrFinal){
                     continue;
                 }
 

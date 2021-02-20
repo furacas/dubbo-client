@@ -12,7 +12,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.ui.components.panels.NonOpaquePanel;
 
-import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -23,16 +22,14 @@ public class JsonEditor extends NonOpaquePanel {
 
     private final PsiFile psiFile;
 
-    private final FileEditor fileEditor;
-
     private final Project project;
 
     public JsonEditor(Project project) {
         this.project = project;
         this.psiFile = createPsiFile();
         VirtualFile virtualFile = psiFile.getVirtualFile();
-        this.fileEditor = createFileEditor(virtualFile);
-        this.add(this.fileEditor.getComponent(), BorderLayout.CENTER);
+        FileEditor fileEditor = createFileEditor(virtualFile);
+        this.add(fileEditor.getComponent(), BorderLayout.CENTER);
     }
 
     private FileEditor createFileEditor(VirtualFile virtualFile) {
