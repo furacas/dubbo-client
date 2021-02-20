@@ -1,6 +1,11 @@
 package io.github.lmikoto;
 
-import org.omg.CORBA.UNKNOWN;
+import static io.github.lmikoto.Const.DUBBO_PREFIX;
+import static io.github.lmikoto.Const.NACOS_PREFIX;
+import static io.github.lmikoto.Const.ZK_PREFIX;
+
+import com.google.common.collect.Sets;
+import java.util.Set;
 
 /**
  * @author liuyang
@@ -8,19 +13,33 @@ import org.omg.CORBA.UNKNOWN;
  */
 public enum Address {
 
+    /**
+     * dubbo url
+     */
     DUBBO,
+    /**
+     * 注册中心 url
+     */
     REGISTRY,
+    /**
+     * 未知
+     */
     UNKNOWN;
 
+
+    /**
+     * todo 补上其他注册中心
+     */
+    private static final Set<String> REGISTRY_PREFIXES = Sets.newHashSet(ZK_PREFIX, NACOS_PREFIX);
+
     public static Address getAddressType(String address){
-        if(address.startsWith("dubbo")){
+        if(address.startsWith(DUBBO_PREFIX)){
             return DUBBO;
         }
-        // todo 补上其他注册中心
-        if (address.startsWith("zookeeper") ||
-                address.startsWith("nacos")
-        ){
-            return REGISTRY;
+        for (String registryPrefix : REGISTRY_PREFIXES) {
+            if (address.startsWith(registryPrefix)) {
+                return REGISTRY;
+            }
         }
         return UNKNOWN;
     }

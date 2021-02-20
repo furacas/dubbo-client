@@ -8,15 +8,22 @@ import lombok.SneakyThrows;
  * 2021/2/4 2:15 下午
  */
 public class JsonUtils {
-    private static ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @SneakyThrows
     public static String toPrettyJson(Object o){
-        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(o);
+        return MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(o);
     }
 
     @SneakyThrows
     public static <T> T fromJson(String json, Class<T> clazz){
-        return mapper.readValue(json,clazz);
+        return MAPPER.readValue(json, clazz);
     }
+
+    @SneakyThrows
+    public static <T> T fromJson(String json, TypeReference<T> typeReference){
+        return MAPPER.readValue(json, typeReference);
+    }
+
+    public static abstract class TypeReference<T> extends com.fasterxml.jackson.core.type.TypeReference<T> {}
 }

@@ -1,5 +1,7 @@
 package io.github.lmikoto;
 
+import static org.apache.dubbo.common.constants.CommonConstants.GENERIC_SERIALIZATION_DEFAULT;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ReferenceConfig;
@@ -16,14 +18,14 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DubboUtils {
 
-    private static ApplicationConfig application = new ApplicationConfig();
+    private static final ApplicationConfig APPLICATION = new ApplicationConfig();
 
-    private static Map<String, ReferenceConfig<GenericService>> cacheReferenceMap = new ConcurrentHashMap();
+    private static final Map<String, ReferenceConfig<GenericService>> CACHE_REFERENCE_MAP = new ConcurrentHashMap<>();
 
-    private static Map<String, RegistryConfig> registryConfigCache = new ConcurrentHashMap();
+    private static final Map<String, RegistryConfig> REGISTRY_CONFIG_CACHE = new ConcurrentHashMap<>();
 
     static {
-        application.setName(Const.NAME);
+        APPLICATION.setName(Const.NAME);
     }
 
     public static Object invoke(DubboEntity entity){
@@ -47,8 +49,8 @@ public class DubboUtils {
                     return genericService.$invoke(entity.getMethodName(), entity.getMethodType(), entity.getParam());
                 } catch (Exception e) {
                     referenceConfig.destroy();
-                    String key = address.name() + "-" + entity.getInterfaceName() + address.name();;
-                    cacheReferenceMap.remove(key);
+                    String key = address.name() + "-" + entity.getInterfaceName() + address.name();
+                    CACHE_REFERENCE_MAP.remove(key);
                     return e.getLocalizedMessage();
                 }
             }
@@ -61,13 +63,13 @@ public class DubboUtils {
         Address addressType = Address.getAddressType(entity.getAddress());
 
         String key = addressType.name() + "-" + entity.getInterfaceName() + addressType.name();
-        ReferenceConfig<GenericService> reference = cacheReferenceMap.get(key);
+        ReferenceConfig<GenericService> reference = CACHE_REFERENCE_MAP.get(key);
         if (Objects.isNull(reference)) {
             reference = new ReferenceConfig<>();
-            reference.setApplication(application);
+            reference.setApplication(APPLICATION);
             reference.setInterface(entity.getInterfaceName());
             reference.setCheck(false);
-            reference.setGeneric(true);
+            reference.setGeneric(GENERIC_SERIALIZATION_DEFAULT);
             reference.setRetries(0);
             reference.setTimeout(entity.getTimeout());
 
@@ -84,7 +86,7 @@ public class DubboUtils {
                 reference.setVersion(entity.getVersion());
             }
 
-            cacheReferenceMap.put(key, reference);
+            CACHE_REFERENCE_MAP.put(key, reference);
         }
 
         return reference;
@@ -92,7 +94,7 @@ public class DubboUtils {
 
     private static RegistryConfig getRegistryConfig(String address, String version) {
         String key = address + "-" + version;
-        RegistryConfig registryConfig = registryConfigCache.get(key);
+        RegistryConfig registryConfig = REGISTRY_CONFIG_CACHE.get(key);
         if (Objects.isNull(registryConfig)) {
             registryConfig = new RegistryConfig();
             if (StringUtils.isNotBlank(address)) {
@@ -103,7 +105,7 @@ public class DubboUtils {
                 registryConfig.setVersion(version);
             }
 
-            registryConfigCache.put(key, registryConfig);
+            REGISTRY_CONFIG_CACHE.put(key, registryConfig);
         }
 
         return registryConfig;

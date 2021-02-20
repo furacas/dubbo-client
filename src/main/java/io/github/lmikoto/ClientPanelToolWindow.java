@@ -16,7 +16,7 @@ public class ClientPanelToolWindow implements ToolWindowFactory {
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         ClientPanel client = new ClientPanel(project);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-        Content content = contentFactory.createContent(client, (String)null, false);
+        Content content = contentFactory.createContent(client, null, false);
         toolWindow.getContentManager().addContent(content);
     }
 }
