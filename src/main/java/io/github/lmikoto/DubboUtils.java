@@ -62,7 +62,7 @@ public class DubboUtils {
 
         Address addressType = Address.getAddressType(entity.getAddress());
 
-        String key = addressType.name() + "-" + entity.getInterfaceName() + addressType.name();
+        String key = entity.getAddress() + "-" + addressType.name() + "-" + entity.getInterfaceName() + addressType.name();
         ReferenceConfig<GenericService> reference = CACHE_REFERENCE_MAP.get(key);
         if (Objects.isNull(reference)) {
             reference = new ReferenceConfig<>();
