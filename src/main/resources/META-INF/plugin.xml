@@ -4,7 +4,10 @@
     <vendor email="lmikoto@outlook.com">Dubbo Client</vendor>
 
     <description><![CDATA[
-    Dubbo Client<br>
+    Dubbo Client</br>
+    Dubbo Client是一个可以在本地直接调用dubbo服务的idea插件。</br>
+    1. 支持Dubbo协议直接调用</br>
+    2. 支持通过nacos注册中心调用</br>
     ]]></description>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
@@ -17,6 +20,8 @@
                     factoryClass="io.github.lmikoto.ClientPanelToolWindow"/>
         <applicationService serviceImplementation="io.github.lmikoto.Setting"/>
     </extensions>
+
+    <idea-version since-build="201"/>
 
     <actions>
         <!-- Add your actions here -->

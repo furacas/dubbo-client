@@ -159,7 +159,7 @@ public class ClientPanel extends JPanel {
         }
     }
 
-    public static void refreshUI(ClientPanel client, DubboEntity entity) {
+    public static void refreshUserInterface(ClientPanel client, DubboEntity entity) {
         entity2UI(client,entity);
         JsonEditor jsonEditorReq = client.getJsonEditorReq();
         Map<String, Object> map = Maps.newHashMapWithExpectedSize(2);

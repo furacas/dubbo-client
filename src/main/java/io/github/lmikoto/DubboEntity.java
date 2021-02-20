@@ -1,7 +1,6 @@
 package io.github.lmikoto;
 
 import lombok.Data;
-import lombok.SneakyThrows;
 
 import java.io.Serializable;
 

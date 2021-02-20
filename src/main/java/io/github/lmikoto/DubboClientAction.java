@@ -57,7 +57,7 @@ public class DubboClientAction extends AnAction {
                         entity.setAddress(Const.DEFAULT_DUBBO_ADDRESS);
                     }
 
-                    ClientPanel.refreshUI(client, entity);
+                    ClientPanel.refreshUserInterface(client, entity);
                 });
         }
     }

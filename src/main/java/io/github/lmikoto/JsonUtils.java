@@ -16,11 +16,6 @@ public class JsonUtils {
     }
 
     @SneakyThrows
-    public static <T> T fromJson(String json, Class<T> clazz){
-        return MAPPER.readValue(json, clazz);
-    }
-
-    @SneakyThrows
     public static <T> T fromJson(String json, TypeReference<T> typeReference){
         return MAPPER.readValue(json, typeReference);
     }
