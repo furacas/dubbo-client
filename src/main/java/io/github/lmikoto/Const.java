@@ -22,4 +22,6 @@ public interface Const {
     String ZK_PREFIX = "zookeeper";
 
     String NACOS_PREFIX = "nacos";
+
+    String GENERIC_PREFIX = "<";
 }
