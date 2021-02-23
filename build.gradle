@@ -37,5 +37,6 @@ patchPluginXml {
 }
 
 publishPlugin {
-    token publishToken
+    def pToken = hasProperty('publishToken') ? publishToken : System.getenv('publishToken')
+    token pToken
 }
