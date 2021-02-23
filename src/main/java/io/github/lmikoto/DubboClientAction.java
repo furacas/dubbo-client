@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.psi.*;
+import io.github.lmikoto.ui.ClientPanel;
 
 import java.util.Optional;
 import java.util.Objects;

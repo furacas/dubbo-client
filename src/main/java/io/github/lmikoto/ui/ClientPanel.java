@@ -1,9 +1,10 @@
-package io.github.lmikoto;
+package io.github.lmikoto.ui;
 
 import com.google.common.collect.Maps;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
+import io.github.lmikoto.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.collections.CollectionUtils;
@@ -49,6 +50,7 @@ public class ClientPanel extends JPanel {
     private JLabel tips;
 
     private JTextField timeout;
+    private JCheckBox useProxy;
 
     private JsonEditor jsonEditorReq;
 
@@ -121,6 +123,13 @@ public class ClientPanel extends JPanel {
                     return ex.getMessage();
                 }
             });
+        });
+
+        useProxy.addActionListener(e->{
+            JCheckBox checkBox = (JCheckBox)e.getSource();
+            if(checkBox.isSelected()){
+                ProxyDialog dialog = new ProxyDialog();
+            }
         });
     }
 
