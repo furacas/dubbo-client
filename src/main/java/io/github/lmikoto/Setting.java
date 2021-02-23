@@ -6,6 +6,7 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import org.apache.commons.collections.CollectionUtils;
@@ -25,9 +26,17 @@ import java.util.*;
 public class Setting implements PersistentStateComponent<Setting> {
 
     @Setter
-    public List<String> address;
+    private List<String> address;
 
-    public Map<String,DubboEntity> entityCache = Maps.newHashMap();
+    private Map<String,DubboEntity> entityCache = Maps.newHashMap();
+
+    @Setter
+    @Getter
+    private String proxyIp;
+
+    @Setter
+    @Getter
+    private String proxyPort;
 
     @SneakyThrows
     public DubboEntity getCache(String interfaceName, String methodName, String[] methodType){

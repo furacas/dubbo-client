@@ -1,7 +1,8 @@
-package io.github.lmikoto;
+package io.github.lmikoto.utils;
 
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiParameterList;
+import io.github.lmikoto.Type;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,5 +1,8 @@
 package io.github.lmikoto.ui;
 
+import io.github.lmikoto.Setting;
+import io.github.lmikoto.utils.SocketPoxyUtils;
+
 import javax.swing.*;
 import java.awt.event.*;
 
@@ -10,8 +13,8 @@ public class ProxyDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JTextField textField1;
-    private JTextField textField2;
+    private JTextField ip;
+    private JTextField port;
 
     public ProxyDialog() {
         setContentPane(contentPane);
@@ -39,20 +42,25 @@ public class ProxyDialog extends JDialog {
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
-        setTitle("set proxy");
-        setSize(280,150);
+        Setting setting = Setting.getInstance();
+        ip.setText(setting.getProxyIp());
+        port.setText(setting.getProxyPort());
 
+        setTitle("设置socket代理");
+        setSize(280,150);
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
     private void onOK() {
-        // add your code here
+        Setting setting = Setting.getInstance();
+        setting.setProxyIp(ip.getText());
+        setting.setProxyPort(port.getText());
+        SocketPoxyUtils.setProxy(ip.getText(),port.getText());
         dispose();
     }
 
     private void onCancel() {
-        // add your code here if necessary
         dispose();
     }
 

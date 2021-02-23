@@ -5,6 +5,9 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import io.github.lmikoto.*;
+import io.github.lmikoto.utils.DubboUtils;
+import io.github.lmikoto.utils.JsonUtils;
+import io.github.lmikoto.utils.SocketPoxyUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.collections.CollectionUtils;
@@ -17,7 +20,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import io.github.lmikoto.JsonUtils.TypeReference;
+import io.github.lmikoto.utils.JsonUtils.TypeReference;
 
 /**
  * @author liuyang
@@ -128,7 +131,9 @@ public class ClientPanel extends JPanel {
         useProxy.addActionListener(e->{
             JCheckBox checkBox = (JCheckBox)e.getSource();
             if(checkBox.isSelected()){
-                ProxyDialog dialog = new ProxyDialog();
+                new ProxyDialog();
+            }else{
+                SocketPoxyUtils.cancelProxy();
             }
         });
     }

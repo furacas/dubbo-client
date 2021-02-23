@@ -1,4 +1,4 @@
-package io.github.lmikoto;
+package io.github.lmikoto.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
