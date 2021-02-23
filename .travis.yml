@@ -1,0 +1,15 @@
+jdk: openjdk8
+script:
+  - ./gradlew buildPlugin
+#after_success:
+#  - codecov
+
+deploy:
+  provider: releases
+  skip_cleanup: true
+  file: "$TRAVIS_BUILD_DIR/build/distributions/dubbo-client-*.zip"
+  api_key:
+    secure: "$API_KEY"
+  on:
+    tags: true
+    draft: false
