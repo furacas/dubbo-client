@@ -3,8 +3,10 @@ plugins {
     id 'org.jetbrains.intellij' version '0.6.5'
 }
 
+projectVersion = '1.2.4'
+
 group 'io.github.lmikoto'
-version '1.2.4'
+version projectVersion
 
 repositories {
     maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}

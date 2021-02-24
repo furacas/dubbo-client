@@ -1,6 +1,10 @@
-./gradlew -PWHATEVER_NEW_VERSION=$1
+VERSION="projectVersion \"$1\""
+
+line=$(sed -n '/projectVersion/=' build.gradle)
+echo $line
+newline=$(expr $line[0] - 1)
+sed  -i  "$line  d"   build.gradle
+sed -i "$newline a\\$VERSION" build.gradle
 echo $1
 #git tag $0
 #git push --tags
-// todo
-https://www.cnblogs.com/kaerxifa/p/12132369.html
