@@ -52,7 +52,7 @@ public class DubboUtils {
                     return genericService.$invoke(entity.getMethodName(), entity.getMethodType(), entity.getParam());
                 } catch (Exception e) {
                     referenceConfig.destroy();
-                    String key = address.name() + "-" + entity.getInterfaceName() + address.name();
+                    String key = entity.getAddress() + "-" + address.name() + "-" + entity.getInterfaceName() + address.name();
                     CACHE_REFERENCE_MAP.remove(key);
                     return e.getLocalizedMessage();
                 }
