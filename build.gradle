@@ -33,7 +33,10 @@ patchPluginXml {
     changeNotes """
       1.0.0 提供Dubbo本地调用功能.<br>
       1.1.0 提供Nacos注册中心调用功能.<br>
+      1.2.0 提供代理功能.<br>
       """
+    sinceBuild '191'
+    untilBuild '203.*'
 }
 
 publishPlugin {

@@ -193,7 +193,7 @@ public class ClientPanel extends JPanel {
 
 
     private static void writeDocument(Project project, Document document, String text) {
-        WriteCommandAction.runWriteCommandAction(project, () -> document.setText(text));
+        WriteCommandAction.runWriteCommandAction(project, () -> document.setText(text.replace("\r\n","\n")));
     }
 
 }
