@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.lmikoto'
-version '1.2.2'
+version '1.2.3'
 
 repositories {
     maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
@@ -38,7 +38,7 @@ patchPluginXml {
     sinceBuild '191'
     untilBuild '203.*'
 }
-
+def t = hasProperty('publishToken') ? publishToken : System.getenv('publishToken')
 publishPlugin {
-    token hasProperty('publishToken') ? publishToken : System.getenv('publishToken')
+    token t
 }
