@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'org.jetbrains.intellij' version '0.6.5'
 }
-version = "1.2.18"
+version = "1.2.24"
 
 group 'io.github.lmikoto'
 
@@ -42,28 +42,30 @@ publishPlugin {
     token t
 }
 
-task release(){
-    def dir = System.getProperty("user.dir")
-    def path = dir + "/build.gradle"
-    def content = ""
-    def line = 0
-    def vs = project.hasProperty('v') ? v : System.getenv('v')
-    new File(path).withReader('UTF-8') { reader ->
-        reader.eachLine {
-            if (line == 4) {
-                it = "version = \"" + vs + "\""
+task release{
+    doLast {
+        def dir = System.getProperty("user.dir")
+        def path = dir + "/build.gradle"
+        def content = ""
+        def line = 0
+        def vs = project.hasProperty('v') ? v : System.getenv('v')
+        new File(path).withReader('UTF-8') { reader ->
+            reader.eachLine {
+                if (line == 4) {
+                    it = "version = \"" + vs + "\""
+                }
+                content <<= it
+                content << '\n'
+                line ++;
             }
-            content <<= it
-            content << '\n'
-            line ++;
         }
-    }
 
-    new File(path).withWriter('UTF-8') { writer -> writer.append(content)}
-    "git add .".execute()
-    "git commit -m release${vs}".execute()
-    "git tag ${vs}".execute()
-    "git push --tags".execute()
-    "git push".execute()
+        new File(path).withWriter('UTF-8') { writer -> writer.append(content)}
+        "git add .".execute()
+        "git commit -m release ${vs}".execute()
+        "git tag ${vs}".execute()
+        "git push --tags".execute()
+        "git push".execute()
+    }
 }
 
