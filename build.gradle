@@ -59,13 +59,9 @@ task release(){
     }
 
     new File(path).withWriter('UTF-8') { writer -> writer.append(content)}
-    def addPro = "git add .".execute()
-    def commit = "git commit -m release".execute()
-//    addPro.waitFor()
-
-//    commandLine "git","add","."
-//    commandLine "git","commit","-m","test"
-//    commandLine "git","tag",v
-//    commandLine "git","push","--tag"
+    "git add .".execute()
+    "git commit -m release${v}".execute()
+    "git tag ${v}".execute()
+    "git push --tag".execute()
 }
 
