@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'org.jetbrains.intellij' version '0.6.5'
 }
-version = "1.2.13"
+version = "1.2.16"
 
 group 'io.github.lmikoto'
 
@@ -60,15 +60,10 @@ task release(){
     }
 
     new File(path).withWriter('UTF-8') { writer -> writer.append(content)}
-    def add = "git add .".execute()
-    add.waitFor()
-    def commit = "git commit -m release ${vs}".execute()
-    commit.waitFor()
-    def tag = "git tag ${vs}".execute()
-    tag.waitFor()
-    def push = "git push".execute()
-    push.waitFor()
-    def pushTag = "git push --tags".execute()
-    pushTag.waitFor()
+    "git add .".execute()
+    "git commit -m release${vs}".execute()
+    "git tag ${vs}".execute()
+    "git push --tag".execute()
+    "git push --tags".execute()
 }
 
