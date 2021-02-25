@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'org.jetbrains.intellij' version '0.6.5'
 }
-version = "1.2.27"
+version = "1.2.28"
 
 group 'io.github.lmikoto'
 
@@ -64,7 +64,6 @@ task release{
         "git add .".execute()
         "git commit -m release${vs}".execute()
         "git tag ${vs}".execute()
-        "git push --tag".execute()
         "git push --tags".execute()
     }
 }
