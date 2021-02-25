@@ -18,7 +18,7 @@ deploy:
   skip_cleanup: true
   file: "$TRAVIS_BUILD_DIR/build/distributions/dubbo-client-*.zip"
   api_key:
-    secure: "$API_KEY"
+    secure: $API_KEY
   on:
     tags: true
     draft: false
