@@ -42,7 +42,7 @@ publishPlugin {
     token t
 }
 
-task release(type: Exec){
+task release(){
     def dir = System.getProperty("user.dir")
     def path = dir + "/build.gradle"
     def content = ""
@@ -59,8 +59,13 @@ task release(type: Exec){
     }
 
     new File(path).withWriter('UTF-8') { writer -> writer.append(content)}
+    def addPro = "git add .".execute()
+    def commit = "git commit -m release".execute()
+//    addPro.waitFor()
 
-    commandLine "git","add","."
-//    commandLine "git","commit","-m",v
+//    commandLine "git","add","."
+//    commandLine "git","commit","-m","test"
+//    commandLine "git","tag",v
+//    commandLine "git","push","--tag"
 }
 
