@@ -2,14 +2,11 @@ plugins {
     id 'java'
     id 'org.jetbrains.intellij' version '0.6.5'
 }
-
-projectVersion = '1.2.4'
+version = "1.2.5"
 
 group 'io.github.lmikoto'
-version projectVersion
 
 repositories {
-    maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
     mavenCentral()
 }
 
@@ -44,3 +41,26 @@ def t = hasProperty('publishToken') ? publishToken : System.getenv('publishToken
 publishPlugin {
     token t
 }
+
+task release(type: Exec){
+    def dir = System.getProperty("user.dir")
+    def path = dir + "/build.gradle"
+    def content = ""
+    def line = 0
+    new File(path).withReader('UTF-8') { reader ->
+        reader.eachLine {
+            if (line == 4) {
+                it = "version = \"" + v + "\""
+            }
+            content <<= it
+            content << '\n'
+            line ++;
+        }
+    }
+
+    new File(path).withWriter('UTF-8') { writer -> writer.append(content)}
+
+    commandLine "git","add","."
+//    commandLine "git","commit","-m",v
+}
+
