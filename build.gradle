@@ -34,7 +34,7 @@ patchPluginXml {
       1.1.0 提供Nacos注册中心调用功能.<br>
       1.2.0 提供代理功能.<br>
       """
-    sinceBuild '191'
+    sinceBuild '201'
     untilBuild '203.*'
 }
 def t = hasProperty('publishToken') ? publishToken : System.getenv('publishToken')
