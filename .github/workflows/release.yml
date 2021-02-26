@@ -24,6 +24,8 @@ jobs:
           artifacts: "build/distributions/dubbo-client-*.zip"
           token: ${{ secrets.TOKEN }}
       - name: publish
+        env:
+          publishToken: ${{secrets.PUBLISHTOKEN}}
         run: |
           echo "publish"
           chmod +x gradlew
