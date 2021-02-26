@@ -1,0 +1,24 @@
+name: release
+on:
+  push:
+    tags:
+      - '*'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: build
+        run: |
+          echo "build"
+          chmod +x gradlew
+          ./gradlew buildPlugin
+      - name: release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/distributions/dubbo-client-*.zip"
+          token: ${{ secrets.GITHUB_TOKEN }}
