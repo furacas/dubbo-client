@@ -9,6 +9,7 @@ import com.intellij.psi.*;
 import io.github.lmikoto.ui.ClientPanel;
 import io.github.lmikoto.utils.ParamUtils;
 
+import java.awt.*;
 import java.util.Optional;
 import java.util.Objects;
 
@@ -42,24 +43,27 @@ public class DubboClientAction extends AnAction {
                 .ifPresent(toolWindow -> {
                     toolWindow.show(() -> {
                     });
-                    ClientPanel client = (ClientPanel)toolWindow.getComponent().getComponent(0);
+                    Component component = toolWindow.getComponent().getComponent(0);
+                    if(component instanceof ClientPanel){
+                        ClientPanel client = (ClientPanel)toolWindow.getComponent().getComponent(0);
 
-                    Setting instance = Setting.getInstance();
+                        Setting instance = Setting.getInstance();
 
-                    DubboEntity entity = instance.getCache(interfaceName, methodName, methodType);
-                    if (Objects.isNull(entity)) {
-                        Object[] initParamArray = ParamUtils.getInitParamArray(psiMethod.getParameterList());
-                        entity = new DubboEntity();
-                        entity.setInterfaceName(interfaceName);
-                        entity.setParam(initParamArray);
-                        entity.setMethodType(methodType);
-                        entity.setMethodName(methodName);
-                        entity.setVersion(Const.DEFAULT_VERSION);
-                        entity.setTimeout(10000);
-                        entity.setAddress(Const.DEFAULT_DUBBO_ADDRESS);
+                        DubboEntity entity = instance.getCache(interfaceName, methodName, methodType);
+                        if (Objects.isNull(entity)) {
+                            Object[] initParamArray = ParamUtils.getInitParamArray(psiMethod.getParameterList());
+                            entity = new DubboEntity();
+                            entity.setInterfaceName(interfaceName);
+                            entity.setParam(initParamArray);
+                            entity.setMethodType(methodType);
+                            entity.setMethodName(methodName);
+                            entity.setVersion(Const.DEFAULT_VERSION);
+                            entity.setTimeout(10000);
+                            entity.setAddress(Const.DEFAULT_DUBBO_ADDRESS);
+                        }
+
+                        ClientPanel.refreshUserInterface(client, entity);
                     }
-
-                    ClientPanel.refreshUserInterface(client, entity);
                 });
         }
     }
