@@ -8,6 +8,7 @@ import io.github.lmikoto.*;
 import io.github.lmikoto.utils.DubboUtils;
 import io.github.lmikoto.utils.JsonUtils;
 import io.github.lmikoto.utils.SocketPoxyUtils;
+import io.github.lmikoto.utils.TelnetUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.collections.CollectionUtils;
@@ -53,7 +54,10 @@ public class ClientPanel extends JPanel {
     private JLabel tips;
 
     private JTextField timeout;
+
     private JCheckBox useProxy;
+
+    private JButton copyTelnet;
 
     private JsonEditor jsonEditorReq;
 
@@ -135,6 +139,14 @@ public class ClientPanel extends JPanel {
             }else{
                 SocketPoxyUtils.cancelProxy();
             }
+        });
+
+        copyTelnet.addActionListener(e->{
+            refreshEntity();
+            saveCache();
+            TelnetUtils.copy(entity);
+
+            tips.setText("复制成功");
         });
     }
 

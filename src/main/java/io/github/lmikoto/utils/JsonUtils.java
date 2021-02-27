@@ -20,5 +20,10 @@ public class JsonUtils {
         return MAPPER.readValue(json, typeReference);
     }
 
+    @SneakyThrows
+    public static String toJson(Object param) {
+        return MAPPER.writeValueAsString(param);
+    }
+
     public static abstract class TypeReference<T> extends com.fasterxml.jackson.core.type.TypeReference<T> {}
 }
