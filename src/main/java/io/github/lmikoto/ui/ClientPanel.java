@@ -11,6 +11,7 @@ import io.github.lmikoto.utils.SocketPoxyUtils;
 import io.github.lmikoto.utils.TelnetUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
