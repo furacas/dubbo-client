@@ -52,7 +52,7 @@ public class DubboUtils {
                     return genericService.$invoke(entity.getMethodName(), entity.getMethodType(), entity.getParam());
                 } catch (Exception e) {
                     referenceConfig.destroy();
-                    String key = entity.getAddress() + "-" + address.name() + "-" + entity.getInterfaceName() + address.name();
+                    String key = getCacheKey(entity);
                     CACHE_REFERENCE_MAP.remove(key);
                     return e.getLocalizedMessage();
                 }
@@ -60,12 +60,17 @@ public class DubboUtils {
         }
     }
 
+    private static String getCacheKey(DubboEntity entity){
+        Address address = Address.getAddressType(entity.getAddress());
+        return entity.getAddress() + "-" + address.name() + "-" + entity.getInterfaceName() + "-" + address.name() + '-' + entity.getVersion();
+    }
+
     private static ReferenceConfig<GenericService> getReferenceConfig(DubboEntity entity) {
         Thread.currentThread().setContextClassLoader(DubboEntity.class.getClassLoader());
 
         Address addressType = Address.getAddressType(entity.getAddress());
 
-        String key = entity.getAddress() + "-" + addressType.name() + "-" + entity.getInterfaceName() + addressType.name();
+        String key = getCacheKey(entity);
         ReferenceConfig<GenericService> reference = CACHE_REFERENCE_MAP.get(key);
         if (Objects.isNull(reference)) {
             reference = new ReferenceConfig<>();
