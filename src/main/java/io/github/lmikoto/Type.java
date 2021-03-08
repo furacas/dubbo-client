@@ -133,10 +133,12 @@ public enum Type {
                 Byte.class.getCanonicalName().equals(type) ||
                 BigDecimal.class.getCanonicalName().equals(type) ||
                 Double.class.getCanonicalName().equals(type) ||
+                Boolean.class.getCanonicalName().equals(type) ||
                 "int".equals(type) ||
                 "long".equals(type) ||
                 "float".equals(type) ||
                 "double".equals(type) ||
+                "boolean".equals(type) ||
                 "byte".equals(type);
 
     }
