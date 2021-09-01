@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'org.jetbrains.intellij' version '0.6.5'
 }
-version = "1.4.0"
+version = "null"
 
 group 'io.github.lmikoto'
 
@@ -38,7 +38,7 @@ patchPluginXml {
       1.4.0 支持调用参数转换程Telnent调用参数.<br>
       """
     sinceBuild '201'
-    untilBuild '203.*'
+    untilBuild '211.*'
 }
 def t = hasProperty('publishToken') ? publishToken : System.getenv('publishToken')
 publishPlugin {
