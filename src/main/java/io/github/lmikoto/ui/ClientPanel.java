@@ -60,6 +60,8 @@ public class ClientPanel extends JPanel {
 
     private JButton copyTelnet;
 
+    private JTextField group;
+
     private JsonEditor jsonEditorReq;
 
     private JsonEditor jsonEditorResp;
@@ -163,6 +165,7 @@ public class ClientPanel extends JPanel {
         entity.setInterfaceName(interfaceName.getText());
         entity.setAddress((String)addressBox.getSelectedItem());
         entity.setVersion(version.getText());
+        entity.setGroup(group.getText());
         entity.setTimeout(StringUtils.isBlank(timeout.getText()) ? null : Integer.valueOf(timeout.getText()));
         if (jsonEditorReq.getDocumentText() != null && jsonEditorReq.getDocumentText().length() > 0) {
             Map<String, Object> map = JsonUtils.fromJson(jsonEditorReq.getDocumentText(),
@@ -200,6 +203,7 @@ public class ClientPanel extends JPanel {
         client.getInterfaceName().setText(entity.getInterfaceName());
         client.getMethodName().setText(entity.getMethodName());
         client.getVersion().setText(entity.getVersion());
+        client.getGroup().setText(entity.getGroup());
         client.getTimeout().setText(entity.getTimeout().toString());
         client.getAddressBox().setSelectedItem(entity.getAddress());
     }
@@ -208,5 +212,4 @@ public class ClientPanel extends JPanel {
     private static void writeDocument(Project project, Document document, String text) {
         WriteCommandAction.runWriteCommandAction(project, () -> document.setText(text.replace("\r\n","\n")));
     }
-
 }

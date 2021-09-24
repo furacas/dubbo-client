@@ -62,7 +62,7 @@ public class DubboUtils {
 
     private static String getCacheKey(DubboEntity entity){
         Address address = Address.getAddressType(entity.getAddress());
-        return entity.getAddress() + "-" + address.name() + "-" + entity.getInterfaceName() + "-" + address.name() + '-' + entity.getVersion();
+        return entity.getAddress() + "-" + address.name() + "-" + entity.getInterfaceName() + "-" + address.name() + '-' + entity.getVersion() + "-" + entity.getGroup();
     }
 
     private static ReferenceConfig<GenericService> getReferenceConfig(DubboEntity entity) {
@@ -86,7 +86,7 @@ public class DubboUtils {
             }
 
             if(addressType.equals(Address.REGISTRY)){
-                RegistryConfig registryConfig = getRegistryConfig(entity.getAddress(), entity.getVersion());
+                RegistryConfig registryConfig = getRegistryConfig(entity.getAddress(), entity.getVersion(),entity.getGroup());
                 reference.setRegistry(registryConfig);
             }
 
@@ -100,7 +100,7 @@ public class DubboUtils {
         return reference;
     }
 
-    private static RegistryConfig getRegistryConfig(String address, String version) {
+    private static RegistryConfig getRegistryConfig(String address, String version,String group) {
         String key = address + "-" + version;
         RegistryConfig registryConfig = REGISTRY_CONFIG_CACHE.get(key);
         if (Objects.isNull(registryConfig)) {
@@ -111,6 +111,10 @@ public class DubboUtils {
 
             if (StringUtils.isNotBlank(version)) {
                 registryConfig.setVersion(version);
+            }
+
+            if (StringUtils.isNotBlank(group)) {
+                registryConfig.setGroup(group);
             }
 
             REGISTRY_CONFIG_CACHE.put(key, registryConfig);

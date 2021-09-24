@@ -25,6 +25,8 @@ public class DubboEntity implements Serializable,Cloneable {
 
     private Integer timeout;
 
+    private String group;
+
     @Override
     protected DubboEntity clone() throws CloneNotSupportedException {
         return (DubboEntity)super.clone();

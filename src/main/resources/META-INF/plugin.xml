@@ -5,9 +5,9 @@
 
     <description><![CDATA[
     Dubbo Client</br>
-    Dubbo Client是一个可以在本地直接调用dubbo服务的idea插件。</br>
-    1. 支持Dubbo协议直接调用</br>
-    2. 支持通过nacos注册中心调用</br>
+    Dubbo Client is an idea plug-in that can directly call dubbo services locally.</br>
+    1. Support Dubbo protocol direct call</br>
+    2. Support calling through nacos, zk registration center</br>
     ]]></description>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
