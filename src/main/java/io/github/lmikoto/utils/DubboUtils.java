@@ -87,7 +87,7 @@ public class DubboUtils {
             }
 
             if(addressType.equals(Address.REGISTRY)){
-                RegistryConfig registryConfig = getRegistryConfig(entity.getAddress(), entity.getVersion(),entity.getGroup());
+                RegistryConfig registryConfig = getRegistryConfig(entity.getAddress(), entity.getVersion());
                 reference.setRegistry(registryConfig);
             }
 
@@ -105,7 +105,7 @@ public class DubboUtils {
         return reference;
     }
 
-    private static RegistryConfig getRegistryConfig(String address, String version,String group) {
+    private static RegistryConfig getRegistryConfig(String address, String version) {
         String key = address + "-" + version;
         RegistryConfig registryConfig = REGISTRY_CONFIG_CACHE.get(key);
         if (Objects.isNull(registryConfig)) {
@@ -116,10 +116,6 @@ public class DubboUtils {
 
             if (StringUtils.isNotBlank(version)) {
                 registryConfig.setVersion(version);
-            }
-
-            if (StringUtils.isNotBlank(group)) {
-                registryConfig.setGroup(group);
             }
 
             REGISTRY_CONFIG_CACHE.put(key, registryConfig);
