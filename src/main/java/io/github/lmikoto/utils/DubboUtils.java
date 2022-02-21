@@ -72,6 +72,7 @@ public class DubboUtils {
 
         String key = getCacheKey(entity);
         ReferenceConfig<GenericService> reference = CACHE_REFERENCE_MAP.get(key);
+
         if (Objects.isNull(reference)) {
             reference = new ReferenceConfig<>();
             reference.setApplication(APPLICATION);
@@ -92,6 +93,10 @@ public class DubboUtils {
 
             if (StringUtils.isNotBlank(entity.getVersion())) {
                 reference.setVersion(entity.getVersion());
+            }
+
+            if(StringUtils.isNotEmpty(entity.getGroup())){
+                reference.setGroup(entity.getGroup());
             }
 
             CACHE_REFERENCE_MAP.put(key, reference);
