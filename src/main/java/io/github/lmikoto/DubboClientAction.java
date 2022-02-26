@@ -60,6 +60,7 @@ public class DubboClientAction extends AnAction {
                             entity.setVersion(Const.DEFAULT_VERSION);
                             entity.setTimeout(10000);
                             entity.setAddress(Const.DEFAULT_DUBBO_ADDRESS);
+                            entity.setGroup(Const.DEFAULT_GROUP);
                         }
 
                         ClientPanel.refreshUserInterface(client, entity);
